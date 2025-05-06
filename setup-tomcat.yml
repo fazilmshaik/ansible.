@@ -1,0 +1,40 @@
+---
+- name: installing java
+  hosts: webservers
+  become: true
+  tasks:
+  - name: to install java
+    yum:
+      name: java
+      state: latest
+    when: ansible_os_family == "RedHat"
+
+  - name: install java to ubuntu
+    apt:
+      name: default-java
+      state: latest
+    when: ansible_os_family == "Debian"
+
+  - name: download tomcat
+    get_url:
+      url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.104/bin/apache-tomcat-9.0.104.tar.gz
+      dest: /opt
+        
+  - name:  untar tomcat package
+    unarchive:
+      src: /opt/apache-tomcat-9.0.104.tar.gz
+      dest: /opt
+      remote_src: yes  #check for the package in remote machine
+
+  - name: add exection permissions on startup.sh file
+    file:
+      path: /opt/apache-tomcat-9.0.104/bin/startup.sh
+      mode: 0777
+
+  - name: start tomcat services
+    shell: nohup ./startup.sh  #nohuo to run service continuosly
+    args:
+      chdir: /opt/apache-tomcat-9.0.104/bin
+       
+
+       

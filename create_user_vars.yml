@@ -1,0 +1,11 @@
+---
+- name: create user vars
+  hosts: all
+  become: true
+  vars:
+    user: faaz
+  tasks:
+  - name: user vars {{user}}
+    user:
+      name: '{{user}}' 
+

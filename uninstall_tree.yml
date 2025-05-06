@@ -1,0 +1,9 @@
+---
+- name: remove tree
+  hosts: all
+  become: true
+  tasks:
+  - name: uninstalling tree
+    yum:
+      name: tree
+      state: removed
